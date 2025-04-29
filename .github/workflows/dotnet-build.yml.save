@@ -1,0 +1,74 @@
+name: Build e Verificação
+
+on:
+  push:
+    branches: [ main ]
+  schedule:
+    - cron: '0 * * * *'  # Executa a cada hora
+  workflow_dispatch:   # Permite rodar manualmente
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v2
+
+      - name: Configurar o .NET
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: '6.0'
+
+      - name: Restaurar dependências
+        run: dotnet restore
+
+      - name: Compilar o projeto
+        run: dotnet build --configuration Release
+
+      - name: Rodar os testes
+        run: dotnet test --configuration Release
+name: Build e Verificação
+
+on:
+  push:           # Quando houver push
+  schedule:       # Agendamento para cada hora
+    - cron: '0 * * * *'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Action pré-existente para clonar o repositório
+      - name: Checkout do código
+        uses: actions/checkout@v3
+
+      # Action para configurar o .NET SDK
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+
+      # Restaura dependências
+      - name: Restaurar dependências
+        run: dotnet restore
+
+      # Build do projeto
+      - name: Compilar o projeto
+        run: dotnet build --no-restore
+
+      # Script personalizado seu
+      - name: Verificar se README existe (script personalizado)
+        run: |
+          if [ -f README.md ]; then
+            echo "README encontrado! ✅"
+          else
+            echo "README não encontrado! ❌"
+            exit 1
+          fi
+
+      # Rodar testes
+      - name: Executar testes
+        run: dotnet test --no-build --verbosity normal
+# Atualização para forçar leitura do GitHub
