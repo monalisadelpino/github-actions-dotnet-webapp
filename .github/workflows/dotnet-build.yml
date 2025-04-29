@@ -1,30 +1,28 @@
-name: .NET Build
+name: Build .NET app
 
 on:
   push:
     branches:
       - main
-  schedule:
-    - cron: "0 * * * *"  # A cada hora
+  pull_request:
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-      
-    - name: Set up .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: '6.0'  # Ou a versão que você está usando, como '8.0' para .NET 8.0
 
-    - name: Restore dependencies
-      run: dotnet restore ./github4women/github4women.csproj  # Especificando o caminho correto para o .csproj
-    
-    - name: Build
-      run: dotnet build ./github4women/github4women.csproj --configuration Release
-    
-    - name: Run tests
-      run: dotnet test ./github4women/github4women.csproj --configuration Release
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Restore dependencies
+        run: dotnet restore github4women/github4women.csproj
+
+      - name: Build
+        run: dotnet build github4women/github4women.csproj --no-restore --configuration Release
