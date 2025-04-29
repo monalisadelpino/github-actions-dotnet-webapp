@@ -41,3 +41,4 @@ jobs:
       # Rodar testes
       - name: Executar testes
         run: dotnet test --no-build --verbosity normal
+# Atualização para forçar leitura do GitHub
